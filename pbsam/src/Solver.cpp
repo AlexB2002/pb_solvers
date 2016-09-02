@@ -360,9 +360,11 @@ double Solver::iter(int t)
         _LF_[I]->calc_vals(_T_, _F_[I], _sys_, _precalcSH_, k);
 
         _LHN_[I]->calc_vals(_sys_, _T_, _H_, k);
-      //cout << "this is dev " << dev_sph_Ik_[I][k] << endl;
+      //cout << "this is dev " << dev _sph_Ik_[I][k] << endl;
+          _H_[I]->print_kmat(k);    //akuhn
       }
     }
+
 
   for (int I = 0; I < _sys_->get_n(); I++)
   {
@@ -388,6 +390,8 @@ double Solver::iter(int t)
         Ns_tot_++;
         if ( dev_sph_Ik_[I][k] > mu_int )
           mu_int = dev_sph_Ik_[I][k];
+          _H_[I]->print_kmat(k);  //akuhn
+          _F_[I]->print_kmat(k);  //akuhn
       }
     } // end k
   }

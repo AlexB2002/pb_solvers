@@ -289,9 +289,9 @@ void PBSAM::initialize_pbsam()
     for (k=0; k<_setp_->getTypeNCount(i); k++)
     {
       idx = _syst_->get_mol_global_idx(i,k);
-      h_spol_[expct] = make_shared<HMatrix>(idx, _syst_->get_Ns_i(idx),
+      h_spol_[idx] = make_shared<HMatrix>(idx, _syst_->get_Ns_i(idx),
                                             poles_, _consts_->get_kappa());
-      f_spol_[expct] = make_shared<FMatrix>(idx, _syst_->get_Ns_i(idx),
+      f_spol_[idx] = make_shared<FMatrix>(idx, _syst_->get_Ns_i(idx),
                                             poles_, 0.0);
     }
     // Performing similar operations for expansions
@@ -302,8 +302,9 @@ void PBSAM::initialize_pbsam()
       {
         for (k = 0; k < _syst_->get_Ns_i(i); k++)
         {
-          h_spol_[expct]->init_from_exp(estart+".H."+to_string(k)+".exp",k);
-          f_spol_[expct]->init_from_exp(estart+".F."+to_string(k)+".exp",k);
+          idx = _syst_->get_mol_global_idx(i,k);
+          h_spol_[idx]->init_from_exp(estart+".H."+to_string(k)+".exp",k);
+          f_spol_[idx]->init_from_exp(estart+".F."+to_string(k)+".exp",k);
         }
         expct++;
       }
@@ -324,8 +325,9 @@ void PBSAM::initialize_pbsam()
       
       for (int k = 0; k < _syst_->get_typect(i); k++)
       {
-        h_spol_[expct] = self_pol.get_all_H()[0];
-        f_spol_[expct] = self_pol.get_all_F()[0];
+        idx = _syst_->get_mol_global_idx(i,k);
+        h_spol_[idx] = self_pol.get_all_H()[0];
+        f_spol_[idx] = self_pol.get_all_F()[0];
         expct++;
       }
       //Printing out H and F of selfpol
@@ -496,27 +498,27 @@ void PBSAM::run_energyforce()
                                   poles_, imats_, h_spol_, f_spol_);
   if (_syst_->get_n() > 1) solv->solve(solveTol_, 100);
   
-  auto gsolv = make_shared<GradSolver>(_syst_, _consts_, _sh_calc_, 
-                                       _bessl_calc_, solv->get_T(),
-                                       solv->get_all_F(), solv->get_all_H(),
-                                       solv->get_IE(),solv->get_interpol_list(),
-                                        solv->get_precalc_sh(),
-                                       _exp_consts_, poles_);
-  if (_syst_->get_n() > 1) gsolv->solve(solveTol_, 100);
-  
-  PhysCalcSAM calcEnFoTo(solv, gsolv, _setp_->getRunName(), 
-                         _consts_->get_unitsEnum());
-  calcEnFoTo.calc_all();
-  calcEnFoTo.print_all();
-
-  for (i = 0; i < _syst_->get_n(); i++)
-  {
-    Pt tmp = calcEnFoTo.get_forcei_conv(i);
-    force_[i][0] = tmp.x(); force_[i][1] = tmp.y(); force_[i][2] = tmp.z();
-    tmp = calcEnFoTo.get_taui_conv(i);
-    torque_[i][0] = tmp.x(); torque_[i][1] = tmp.y(); torque_[i][2] = tmp.z();
-    nrg_intera_[i]  = calcEnFoTo.get_omegai_conv(i);
-  }
+//  auto gsolv = make_shared<GradSolver>(_syst_, _consts_, _sh_calc_, 
+//                                       _bessl_calc_, solv->get_T(),
+//                                       solv->get_all_F(), solv->get_all_H(),
+//                                       solv->get_IE(),solv->get_interpol_list(),
+//                                        solv->get_precalc_sh(),
+//                                       _exp_consts_, poles_);
+//  if (_syst_->get_n() > 1) gsolv->solve(solveTol_, 100);
+//  
+//  PhysCalcSAM calcEnFoTo(solv, gsolv, _setp_->getRunName(), 
+//                         _consts_->get_unitsEnum());
+//  calcEnFoTo.calc_all();
+//  calcEnFoTo.print_all();
+//
+//  for (i = 0; i < _syst_->get_n(); i++)
+//  {
+//    Pt tmp = calcEnFoTo.get_forcei_conv(i);
+//    force_[i][0] = tmp.x(); force_[i][1] = tmp.y(); force_[i][2] = tmp.z();
+//    tmp = calcEnFoTo.get_taui_conv(i);
+//    torque_[i][0] = tmp.x(); torque_[i][1] = tmp.y(); torque_[i][2] = tmp.z();
+//    nrg_intera_[i]  = calcEnFoTo.get_omegai_conv(i);
+//  }
 
   t3 = clock() - t3;
   printf ("energyforce calc took me %f seconds.\n",

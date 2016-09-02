@@ -77,7 +77,7 @@ void ForceCalcSAM::calc_all_f(vector<shared_ptr<HMatrix> > H,
 
 PhysCalcSAM::PhysCalcSAM(shared_ptr<Solver> _solv, shared_ptr<GradSolver> _gradsolv,
                    string outfname, Units unit)
-:BasePhysCalc(_solv_->get_sys()->get_n(), _solv_->get_consts(), outfname, unit),
+:BasePhysCalc(_solv->get_sys()->get_n(), _solv->get_consts(), outfname, unit),
 _solv_(_solv), _gradSolv_(_gradsolv), _sys_(_solv->get_sys())
 {
   _sys_ = _solv->get_sys();

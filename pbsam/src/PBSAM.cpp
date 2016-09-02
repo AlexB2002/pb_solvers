@@ -497,6 +497,8 @@ void PBSAM::run_energyforce()
   auto solv = make_shared<Solver>(_syst_, _consts_, _sh_calc_, _bessl_calc_,
                                   poles_, imats_, h_spol_, f_spol_);
   if (_syst_->get_n() > 1) solv->solve(solveTol_, 100);
+    
+    cout << "Hello world"<< endl;
   
 //  auto gsolv = make_shared<GradSolver>(_syst_, _consts_, _sh_calc_, 
 //                                       _bessl_calc_, solv->get_T(),

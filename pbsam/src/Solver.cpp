@@ -286,7 +286,7 @@ double Solver::calc_converge_H(int I, int k, bool inner)
   }
   
   if (inner)
-    return mu / double(4.0*p_*p_);
+    return mu / double(4.0*p_*p_); //??
   else
   {
     if ( fabs(den) > 1e-15 )
@@ -300,7 +300,8 @@ double Solver::calc_converge_H(int I, int k, bool inner)
 
 void Solver::iter_innerH(int I, int k)
 {
-  double dev(1e20), toli(1e-6);
+  double dev(1e20), toli(1e-10);  //akuhn
+    
   int ct(0), mxCt(20);
   
   auto mol = _sys_->get_moli(I);
@@ -361,7 +362,7 @@ double Solver::iter(int t)
 
         _LHN_[I]->calc_vals(_sys_, _T_, _H_, k);
       //cout << "this is dev " << dev _sph_Ik_[I][k] << endl;
-          _H_[I]->print_kmat(k);    //akuhn
+         // _H_[I]->print_kmat(k);    //akuhn
       }
     }
 
@@ -374,7 +375,7 @@ double Solver::iter(int t)
       // if there is more than 1 mol, run if there are sphs on mol to pol (LHN)
       if ((_sys_->get_n()>1) && (_LHN_[I]->get_interPol_k(k) != 0))
         pol = false;
-      if((dev_sph_Ik_[I][k] > 0.1*mu_ && pol) ||
+      if((dev_sph_Ik_[I][k] > 0.01*mu_ && pol) ||   //akuhn
          ((t%5==0) && (_sys_->get_n()==1)))
       {
         update_outerH(I, k);
@@ -439,7 +440,7 @@ void Solver::update_outerH(int I, int k)
   }
 }
 
-void Solver::update_prevH(int I, int k)
+void Solver::update_prevH(int I, int k) 
 {
   
   for (int n = 0; n < p_; n++)

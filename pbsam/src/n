@@ -1,0 +1,428 @@
+    1  /Applications/VMD\ 1.9.2.app/Contents/MacOS/startup.command ; exit;
+    2  cd Desktop/
+    3  vi n
+    4  vi ~/.bash_profile
+    5  source ~/.bash_profile
+    6  ;s
+    7  ls
+    8  cd msms/
+    9  ls
+   10  cd ..
+   11  grompp -h
+   12  cd /Applications/MacPyMOL.app/
+   13  ls
+   14  cd Contents/
+   15  ls
+   16  cd Desktop/
+   17  vi url 
+   18  vi ~/.ssh/
+   19  vi ~/.ssh/known_hosts 
+   20  vi config 
+   21  ssh kuhn@loewe-csc.hhlr-gu.de
+   22  ssh alexander@mizu.qb3-berkeley.edu
+   23  ssh alexander@mizu.qb3-berkeley.edu
+   24  cp Desktop/config ~/.ssh/
+   25  ssh ar
+   26  source ~/.bash_profile 
+   27  ls
+   28  cd Desktop/msms/
+   29  ls
+   30  ls *pdb
+   31  vi trast-final.pdb 
+   32  vi trast-final.pdb 
+   33  vi trast-final.pdb 
+   34  vi trast-final.pdb 
+   35  vi trast-final.pdb 
+   36  cd ..
+   37  cd ..
+   38  scp -r alexander@mizu.qb3-berkeley.edu:/Useres/Alexander/PBSAM .
+   39  ls
+   40  ls
+   41   scp -r alexander@dhcp-128-32-142-224.lips.berkeley.edu:/Users/Alexander/PBSAM .
+   42  ls
+   43  cd PBSAM/
+   44  ls
+   45  cd ..
+   46   scp -r alexander@dhcp-128-32-142-224.lips.berkeley.edu:/Users/Alexander/mAbs .
+   47  ls
+   48  cd PBSAM/
+   49  vi url 
+   50  pymol
+   51  vi ~/.bash_profile 
+   52  source ~/.bash_profile 
+   53  pymol 
+   54  cd 
+   55  cd Desktop/
+   56  wget ftp://ftp.fu-berlin.de/unix/graphics/grace/src/grace5/grace-5.1.23.tar.gz
+   57  ls
+   58  tar xzvf grace-5.1.23.tar.gz
+   59  cd grace-5.1.23
+   60  ./configure --x-includes=/usr/X11/include/ --x-libraries=/usr/X11/lib/ --with-motif-library=-lXm --with-extra-incpath=/usr/OpenMotif/include:/usr/local/fftw-3.3.4/include --with-extra-ldpath=/usr/OpenMotif/lib:/usr/local/fftw-3.3.4/lib
+   61  make
+   62  ./configure --x-includes=/usr/X11/include/ --x-libraries=/usr/X11/lib/ --with-motif-library=-lXm --with-extra-incpath=/usr/OpenMotif/include:/usr/local/fftw-3.3.4/include --with-extra-ldpath=/usr/OpenMotif/lib:/usr/local/fftw-3.3.4/lib
+   63  ./configure --x-includes=/usr/X11/include/ --x-libraries=/usr/X11/lib/ --with-motif-library=-lXm 
+   64  ls
+   65  male
+   66  make
+   67  sudo port install grace
+   68  ls
+   69  cd ..
+   70  cd /Volumes/
+   71  ls
+   72  vi HD
+   73  ls
+   74  cd
+   75   scp -r alexander@dhcp-128-32-142-224.lips.berkeley.edu:/Volumes/HD2/software/gromacs .
+   76  ls
+   77  cd gromacs/
+   78  ls
+   79  ls
+   80  cd share/
+   81  ls
+   82  cd gromacs/
+   83  ls
+   84  cd ..
+   85  cd ..
+   86  mkdir build
+   87  cd build/
+   88  cmake .. -DGMX_BUILD_OWN_FFTW=ON
+   89  ls
+   90  cd .rm -r bu
+   91  rm -r bu
+   92  cd ..
+   93  rm -r build/
+   94  ls
+   95  cd share/gromacs/
+   96  ls
+   97  cd tutor/
+   98  ls
+   99  cd
+  100  cd gromacs/
+  101  ls
+  102  cd bin/
+  103  ls
+  104  cd ../include/
+  105  ls
+  106  cd gromacs/
+  107  ls
+  108  cd ..
+  109  cd ..
+  110  ls
+  111  cd share/gromacs/
+  112  ls
+  113  cd top/
+  114  ls
+  115  cd ..
+  116  cd ..
+  117  cd ..
+  118  ls
+  119  mkdir build-cmake
+  120  cd build-cmake/
+  121  cmake ..
+  122  cd ..
+  123  cd ..
+  124  cd /Volumes/
+  125  mv /Users/akuhn/gromacs/ .
+  126  ls
+  127  cd gromacs/build-cmake/
+  128  cmake ..
+  129  cd ..
+  130  cd ..
+  131  rm -r gromacs/
+  132  cd
+  133  ls
+  134  ls
+  135  cd Downloads/
+  136  ls
+  137  mv -r gromacs-5.1.3.tar.gz ..
+  138  mv -r gromacs-5.1.3.tar.gz ../
+  139  ls
+  140  cd ..
+  141  mkdir gromacs
+  142  mv Downloads/gromacs-5.1.3.tar.gz gromacs/
+  143  cd gromacs/
+  144  ls
+  145  tar xfz gromacs-5.0.7.tar.gz
+  146  tar xfz gromacs-5.0.7.tar.gz
+  147  tar xfz gromacs-5.1.3.tar.gz 
+  148  cd gromacs-5.1.3
+  149  mkdir build
+  150  cd build/
+  151  cmake .. -DGMX_BUILD_OWN_FFTW=ON -DREGRESSIONTEST_DOWNLOAD=ON
+  152  ls
+  153  make
+  154  make check
+  155  sudo make install
+  156  editconf -h
+  157  grompp -h
+  158  cd
+  159  clear
+  160  vi ~/.bash_profile 
+  161  cd /usr/local/gromacs/
+  162  ls
+  163  cd bin/
+  164  ls
+  165  cd
+  166  top
+  167  cd Downloads/
+  168  open mab-cone.pdf 
+  169  ls
+  170  cd
+  171  ls
+  172  cd Pictures/
+  173  ls
+  174  cd
+  175  cd Desktop/
+  176  ls
+  177  mv Screen\ Shot\ 2016-08-31\ at\ 4.36.11\ PM.png cone.png
+  178  rm Screen\ Shot\ 2016-08-31\ at\ 4.3*
+  179  open cone.png 
+  180  python 
+  181  python 
+  182  python
+  183  python
+  184  cd .
+  185  cd ..
+  186  cd PBSAM/pb_solvers/antibody-test/
+  187  cd ../../msms/
+  188  ls
+  189  vmd trast-final.pdb 
+  190  source ~/.bash_profile 
+  191  vi trast-final.pdb 
+  192  vmd trast-final.pdb 
+  193  vmd trast-final.pdb 
+  194  vi ~/.bash_profile 
+  195  source ~/.bash_profile 
+  196  vmd trast-final.pdb 
+  197  vi ~/.bash_profile 
+  198  vi trast-final.pdb 
+  199  vmd trast-final.pdb 
+  200  vi trast-final.pdb 
+  201  cd ../pb_solvers/manual/
+  202  ls
+  203  open doc_main.pdf &
+  204  cd ../
+  205  cd ../
+  206  cd pbsam/
+  207  ls
+  208  scp ar:/home/akuhn/pbsam/manual/doc_main.pdf .
+  209  open doc_main.pdf 
+  210  cd ../pb_solvers/antibody-test/
+  211  cp ../scripts/setup/make_starting_xyz.py .
+  212  python make_starting_xyz.py sample_grid 3 10 test 1 100
+  213  python make_starting_xyz.py sample_grid 3 10 test 1 100 1
+  214  python make_starting_xyz.py sample_grid 3 10 1 100 1
+  215  python make_starting_xyz.py sample_grid 3 10 1 100 
+  216  python make_starting_xyz.py sample_grid 3 10 1 
+  217  python make_starting_xyz.py sample_grid 3 10 1 100
+  218  python make_starting_xyz.py random_rad 3 5 test
+  219  ls test_1_*
+  220  vi test_1_1.xyz 
+  221  vi test_1_2.xyz 
+  222  vi test_1_3.xyz 
+  223  haed test_1_*
+  224  head test_1_*
+  225  rm test_1_*
+  226  vi write.sh
+  227  vi t.txt
+  228  chmod +x write.sh 
+  229  ./write.sh 
+  230  cd PBSAM/
+  231  ls
+  232  cd pb_solvers/
+  233  ls
+  234  cd antibody-test/
+  235  ls
+  236  vi write.sh 
+  237  rm t*txt
+  238  vi write.sh 
+  239  ./write.sh 
+  240  vi Downloads/igg1-all.pdb 
+  241  cd Desktop/pb_polz/
+  242  ls
+  243  cd pbsam/
+  244  ls
+  245  cd pbsam_test_files/
+  246  ;s
+  247  ls
+  248  cd electrostatic_test/
+  249  ls
+  250  cd barnase_barstar/
+  251  ls
+  252  cd ..
+  253  cd ..
+  254  cd energyforce_test/f
+  255  cd energyforce_test/
+  256  ls
+  257  cd ..
+  258  cd ..
+  259  ls
+  260  cd ..
+  261  ls
+  262  cd pb_shared/
+  263  ls
+  264  cd ..
+  265  ls
+  266  cd scripts/
+  267  ls
+  268  cd ..
+  269  locate run.apbs.hardrefs.inp
+  270  ls
+  271  cd pbsam/
+  272  ls
+  273  cd pbsam_test_files/
+  274  ls
+  275  cd energyforce_test/
+  276  ls
+  277  vi run.apbs.hardrefs.inp 
+  278  pwd
+  279  vi run.apbs.hardrefs.inp 
+  280  vi run.apbs.hardrefs.inp 
+  281  pwd
+  282  vi run.apbs.hardrefs.inp 
+  283  vi run.apbs.hardrefs.inp 
+  284  cd Desktop/
+  285  ls
+  286  git clone https://github.com/google/googletest.git 
+  287  ls
+  288  git clone https://github.com/google/googletest.git 
+  289  ls
+  290   cd pb_polz/
+  291  ls
+  292  git status
+  293  vi pbsam/src/main.cpp 
+  294  git status
+  295  git add pbsam/src/*
+  296  git status
+  297  git commit -m "Working on printing H files during solve"
+  298  git config --global --edit
+  299  git status
+  300  git push origin master
+  301  git push origin master
+  302  git status
+  303  git add pbsam/src/*
+  304  git status
+  305  git commit -m "Add Hello world"
+  306  git push origin master
+  307  vcd ..
+  308  cd ..
+  309  git status
+  310  cd pb_polz/
+  311  git status
+  312  cd ..
+  313  cd ..
+  314  cd PBSAM/pb_solvers/
+  315  cd ../msms/
+  316  ls
+  317  vi trast_final_new.pqr 
+  318  cd Downloads/
+  319  vmd igg1-all.pdb 
+  320  ssh ham
+  321  cd Desktop/
+  322  git clone https://github.com/AlexB2002/pb_solvers.git pb_polz
+  323  git clone https://github.com/AlexB2002/pb_solvers.git pb_polz
+  324  ls
+  325  cd pb_polz/pbsam/pbsam_test_files/
+  326  ls
+  327  mkdir energyforce_test
+  328  scp lfelberg@agua.qb3.berkeley.edu:~/PBSAM/pb_solvers/pbsam/pbsam_*/energyforce_*/* energyforce_test/
+  329  ls
+  330  cd electrostatic_test/
+  331  ls
+  332  cd ../energyforce_test/
+  333  ls
+  334  vi run.apbs.hardrefs.inp 
+  335  sl
+  336  ls
+  337  vi run.apbs.hardrefs.inp 
+  338  top
+  339  ls
+  340  vi run.apbs.hardrefs.inp 
+  341  vi gly_0.05M.out
+  342  vi gly_0.05M.out.pqr 
+  343  vi gly_0.05M.out
+  344  cd ..
+  345  ls
+  346  cd ..
+  347  ls
+  348  cd src/
+  349  ls
+  350  vo Solver.cpp 
+  351  vi Solver.cpp 
+  352  cd ..
+  353  cd ..
+  354  ls
+  355  cd pbsam/pbsam_test_files/
+  356  ls
+  357  cd electrostatic_test/
+  358  ls
+  359  cd barnase_barstar/
+  360  ls
+  361  cd barnase/
+  362  ls
+  363  vi run.electro_barnase.inp 
+  364  cd ..
+  365  cd ..
+  366  cd ..
+  367  cd energyforce_test/
+  368  ls
+  369  top
+  370  ls
+  371  vi gly_0.05M.out
+  372  ls
+  373  ls *out
+  374  vi gly_0.12M.out
+  375  vi zero.xyz 
+  376  cd ..
+  377  cd ..
+  378  cd ..
+  379  cd ..
+  380  vi git-commends
+  381  cd ..
+  382  cd Desktop/pb_polz/
+  383  ls
+  384  cd ../pbsam/
+  385  ls
+  386  cd pbsam.xcodeproj/
+  387  ls
+  388  cd ..
+  389  ls
+  390  mkdir test
+  391  cd test/
+  392  scp ar:/home/akuhn/pb_alex/build/mAb/Fab/Fab2_cg.pqr
+  393  scp ar:/home/akuhn/pb_alex/build/mAb/Fab/Fab2_cg.pqr .
+  394  vmd Fab2_cg.pqr 
+  395  scp ar:/home/akuhn/pb_alex/build/mAb/Fab/Fab2.pqr .
+  396  vmd Fab2_cg.pqr 
+  397  vmd Fab2_cg.pqr 
+  398  vi Fab2_cg.pqr 
+  399  vmd Fab2_cg.pqr 
+  400  vmd Fab2_cg.pqr 
+  401  pymol Fab2_cg.pqr 
+  402  pymol Fab2_cg.pqr 
+  403  vmd Fab2.pqr 
+  404  vi Fab2.pqr 
+  405  scp ar:/home/akuhn/pb_alex/build/mAb/chain/chainH/chainH_cg.pqr .
+  406  scp ar:/home/akuhn/pb_alex/build/mAb/Fab/FabH/FabH_cg.pqr .
+  407  vmd chainH_cg.pqr 
+  408  cd
+  409  cd Desktop/
+  410  vi git-commends 
+  411  git status
+  412  cd pbsam/
+  413  git status
+  414  vi ../git-commends 
+  415  ls
+  416  vi ../git-commends 
+  417  cd pbsam
+  418  ls
+  419  cd ../pbsam.xcodeproj/
+  420  ls
+  421  cd xcuserdata/
+  422  ls
+  423  cd
+  424  cd Desktop/pb_polz/
+  425  ls
+  426  cd pbsam/src/
+  427  ls
+  428  history >n

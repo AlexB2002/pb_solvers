@@ -498,8 +498,8 @@ void PBSAM::run_energyforce()
                                   poles_, imats_, h_spol_, f_spol_);
   if (_syst_->get_n() > 1) solv->solve(solveTol_, 100);
     
-    cout << "Hello world"<< endl;
-  
+//    cout << "Hello world"<< endl;
+//akuhn solve force out comment
 //  auto gsolv = make_shared<GradSolver>(_syst_, _consts_, _sh_calc_, 
 //                                       _bessl_calc_, solv->get_T(),
 //                                       solv->get_all_F(), solv->get_all_H(),

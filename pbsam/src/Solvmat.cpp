@@ -758,7 +758,7 @@ void LHNMatrix::calc_vals(shared_ptr<SystemSAM> sys, shared_ptr<TMatrix> T,
       {
 //        cout << "This is H before I " << I_ << " and k " << k
 //        << " and j " << J << " and l " << l<< endl;
-        H[J]->print_kmat(l); //akuhn
+     //   H[J]->print_kmat(l); //akuhn
         reex = T->re_expandX(H[J]->get_mat_k(l), I_, k, J, l);
         mat_[k] += reex;
         
@@ -776,7 +776,7 @@ void LHNMatrix::calc_vals(shared_ptr<SystemSAM> sys, shared_ptr<TMatrix> T,
   }
   
 //  cout << "This is LHN I " << I_ << " and k " << k << endl;
-  print_kmat(k); //akuhn
+  //print_kmat(k); //akuhn
 }
 
 XHMatrix::XHMatrix(int I, int ns, int p,

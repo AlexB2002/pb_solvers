@@ -9,15 +9,17 @@
 #include "PhysCalcSAM.h"
 
 
-double EnergyCalcSAM::calc_energy(shared_ptr<HMatrix> H, shared_ptr<LHNMatrix> LHN)
+double EnergyCalcSAM::calc_energy(shared_ptr<HMatrix> H,
+                                  shared_ptr<LHNMatrix> LHN)
 {
-  double E = 0;
+  double E(0), eint(0);
   for (int k = 0; k < H->get_ns(); k++)
   {
     for (int n = 0; n < H->get_p(); n++)
       for (int m = -n; m < n+1; m++)
-        E += (LHN->get_mat_knm(k, n, m).real()*H->get_mat_knm(k, n, m).real()
+        eint += (LHN->get_mat_knm(k, n, m).real()*H->get_mat_knm(k, n, m).real()
               +LHN->get_mat_knm(k, n, m).imag()*H->get_mat_knm(k, n, m).imag());
+      E += eint;
   }
   return E;
 }
@@ -28,6 +30,7 @@ void EnergyCalcSAM::calc_all_energy(vector<shared_ptr<HMatrix> > H,
   for (int i = 0; i < H.size(); i++)
   {
     (*omega_)[i] = calc_energy(H[i], LHN[i]);
+      cout << "Molecule energy " << i << " : " << get_ei(i) << endl;
   }
 }
 
@@ -72,11 +75,15 @@ void ForceCalcSAM::calc_all_f(vector<shared_ptr<HMatrix> > H,
   {
     forces_[i].resize(ks_[i]);
     calc_fI(i, H[i], LHN[i], dH[i][i], dLHN[i][i]);
+    cout << "This is f i " << i << ": " << get_forcei(i).x() << " " <<
+    get_forcei(i).y() << " " << get_forcei(i).z() << " " << endl;
   }
-}
+ }
 
-PhysCalcSAM::PhysCalcSAM(shared_ptr<Solver> _solv, shared_ptr<GradSolver> _gradsolv,
-                   string outfname, Units unit)
+
+PhysCalcSAM::PhysCalcSAM(shared_ptr<Solver> _solv,
+                         shared_ptr<GradSolver> _gradsolv,
+                         string outfname, Units unit)
 :BasePhysCalc(_solv->get_sys()->get_n(), _solv->get_consts(), outfname, unit),
 _solv_(_solv), _gradSolv_(_gradsolv), _sys_(_solv->get_sys())
 {

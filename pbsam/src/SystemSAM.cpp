@@ -324,7 +324,7 @@ CGSphere MoleculeSAM::find_best_center(vector<Pt> sp,vector<Pt> np,
 void MoleculeSAM::check_connect()  //??
 {
   bool all_con = false;
-  int maxct = 20;
+  int maxct = 10;      //akuhn
   double increm_r = 0.5;
   int i, ct = 0;
 
@@ -544,7 +544,7 @@ double SystemSAM::calc_min_dist(int I, int J)
         molecules_[I]->add_Jl_to_inter_act_k(k1, J, k2);
         molecules_[J]->add_Jl_to_inter_act_k(k2, I, k1);
       }
-      if (dist > (c2c-aik-ajk)) dist = c2c-aik-ajk;
+     if (dist > (c2c-aik-ajk)) dist = c2c-aik-ajk;
     }
   }
   return dist;

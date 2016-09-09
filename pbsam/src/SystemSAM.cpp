@@ -255,7 +255,7 @@ CGSphere MoleculeSAM::find_best_center(vector<Pt> sp,vector<Pt> np,
   int sz = (int) unbound.size();
   Pt best_cen;
   double best_a = 0;
-  int iter(1200), best_N(0);
+  int iter(1200), best_N(0); //??
   vector<int> ch;  // encompassed charges of best sphere
   
   best_cen = pos_[unbound[(int) floor(drand48()*sz)]];  
@@ -290,7 +290,7 @@ CGSphere MoleculeSAM::find_best_center(vector<Pt> sp,vector<Pt> np,
     tri_a = sqrt(tri_a) + tol_sp;
     tri_a *= tri_a;
     
-    // count number of unbound charges within this sphere
+    // count number of unbound charges within this sphere  //???
     for (int i = 0; i < sz; i++)
     {
       double dist = (pos_[unbound[i]] - tri_cen).norm() + vdwr_[unbound[i]];
@@ -321,7 +321,7 @@ CGSphere MoleculeSAM::find_best_center(vector<Pt> sp,vector<Pt> np,
   return CGSphere(best_cen, sqrt(best_a), ch);
 }
 
-void MoleculeSAM::check_connect()
+void MoleculeSAM::check_connect()  //??
 {
   bool all_con = false;
   int maxct = 20;
@@ -533,8 +533,8 @@ double SystemSAM::calc_min_dist(int I, int J)
       aik = molecules_[I]->get_ak(k1);
       ajk = molecules_[J]->get_ak(k2);
       c2c = get_pbc_dist_vec_base(cen_ik, cen_jk).norm();
-//      cout << "This is Ik, Jl pair : "  << I << ", "<< k1
-//                << " & "  << J << ", "<< k2 << " dist: " << c2c << endl;
+      cout << "This is Ik, Jl pair : "  << I << ", "<< k1
+                << " & "  << J << ", "<< k2 << " dist: " << c2c << endl;  //akuhn
       if ((inter_pol_d+aik+ajk) > c2c)
       {
         molecules_[I]->add_Jl_to_interk(k1, J, k2);

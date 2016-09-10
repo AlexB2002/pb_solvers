@@ -15,6 +15,13 @@ double EnergyCalcSAM::calc_energy(shared_ptr<HMatrix> H,
   double E(0), eint(0);
   for (int k = 0; k < H->get_ns(); k++)
   {
+//    cout << "This is lhn" << endl;
+//    LHN->print_kmat(k);
+//    
+//    cout << "This is h" << endl;
+//    H->print_kmat(k);
+    
+    eint = 0;
     for (int n = 0; n < H->get_p(); n++)
       for (int m = -n; m < n+1; m++)
         eint += (LHN->get_mat_knm(k, n, m).real()*H->get_mat_knm(k, n, m).real()
@@ -30,7 +37,9 @@ void EnergyCalcSAM::calc_all_energy(vector<shared_ptr<HMatrix> > H,
   for (int i = 0; i < H.size(); i++)
   {
     (*omega_)[i] = calc_energy(H[i], LHN[i]);
-      cout << "Molecule energy " << i << " : " << get_ei(i) << endl;
+
+  //cout << "Molecule energy " << i << " : " << get_ei(i) << endl;
+
   }
 }
 
@@ -75,8 +84,10 @@ void ForceCalcSAM::calc_all_f(vector<shared_ptr<HMatrix> > H,
   {
     forces_[i].resize(ks_[i]);
     calc_fI(i, H[i], LHN[i], dH[i][i], dLHN[i][i]);
-    cout << "This is f i " << i << ": " << get_forcei(i).x() << " " <<
-    get_forcei(i).y() << " " << get_forcei(i).z() << " " << endl;
+
+  //cout << "This is f i " << i << ": " << get_forcei(i).x() << " " <<
+  //get_forcei(i).y() << " " << get_forcei(i).z() << " " << endl;
+
   }
  }
 
@@ -94,8 +105,6 @@ _solv_(_solv), _gradSolv_(_gradsolv), _sys_(_solv->get_sys())
                                    _solv->get_consts()->get_dielectric_water(),
                                    _solv->get_sh(), _solv->get_bessel());
   _torCalc_ = make_shared<TorqueCalcSAM>(_sys_->get_n());
-
-//  compute_units(_solv->get_consts(), unit);
 }
 
 void TorqueCalcSAM::calc_all_tau(shared_ptr<SystemSAM> sys,

@@ -200,6 +200,37 @@ kappa_(_consts->get_kappa())
 }
 
 
+Solver::Solver(shared_ptr<Solver> solvin)
+:
+p_(solvin->p_), kappa_(solvin->kappa_),
+Ns_tot_(solvin->Ns_tot_),
+_E_(solvin->_E_),
+_LE_(solvin->_LE_),
+_IE_(solvin->_IE_),
+_LF_(solvin->_LF_),
+_LH_(solvin->_LH_),
+_LHN_(solvin->_LHN_),
+_XF_(solvin->_XF_),
+_XH_(solvin->_XH_),
+_H_(solvin->_H_),
+_outerH_(solvin->_outerH_),
+_rotH_(solvin->_rotH_),
+_prevH_(solvin->_prevH_),
+_F_(solvin->_F_),
+_T_(solvin->_T_),
+_shCalc_(solvin->_shCalc_),
+_bCalc_(solvin->_bCalc_),
+_consts_(solvin->_consts_),
+_sys_(solvin->_sys_),
+_reExConsts_(solvin->_reExConsts_),
+_expConsts_(solvin->_expConsts_),
+dev_sph_Ik_(solvin->dev_sph_Ik_),
+_precalcSH_(solvin->_precalcSH_),
+mu_(solvin->mu_)
+{
+}
+
+
 void Solver::precalc_sh_lf_lh()
 {
   Pt q;
@@ -234,7 +265,6 @@ void Solver::precalc_sh_numeric()
           else if (_T_->is_analytic(I, k, I, l)) continue;
           else
           {
-
             exp_pts = _sys_->get_gdpt_expij(I, l);
             for (int h = 0; h < exp_pts.size(); h++)
             {
@@ -246,6 +276,19 @@ void Solver::precalc_sh_numeric()
         }
     }
   }
+}
+
+void Solver::set_H_F(vector<shared_ptr<HMatrix > > h_spol,
+                     vector<shared_ptr<FMatrix > > f_spol)
+{
+  int molt;
+  for (int I = 0; I < _sys_->get_n(); I++)
+  {
+    molt = _sys_->get_moli(I)->get_type();
+    _H_[I]->set_all_mats(h_spol[molt]);
+    _F_[I]->set_all_mats(f_spol[molt]);
+  }
+  
 }
 
 double Solver::calc_converge_H(int I, int k, bool inner)
@@ -469,43 +512,45 @@ void Solver::solve(double tol, int maxiter)
   double mu(1e15);
   for (int t = 0; t < maxiter; t++)
   {
-    if ((t%50) == 0) cout << "this is t " << t << endl;
+    if (((t+1)%50) == 0) cout << "this is t " << t << endl;
     mu = iter(t);
     if (mu < tol) break;
-  }
- 
-    
-    for (int I = 0; I < _sys_->get_n(); I++)
-     {
-        for (int k = 0; k < _sys_->get_Ns_i(I); k++)
-        {
-        //  _H_[I]->print_kmat(k);
-         }
-      }
- }
+  }  
+//for (int I = 0; I < _sys_->get_n(); I++)
+//{
+//  for (int k = 0; k < _sys_->get_Ns_i(I); k++)
+//  {
+//    _H_[I]->print_kmat(k);
+//  }
+//}
+}
+
 
 
 void Solver::reset_all()
 {
   for (int I = 0; I < _sys_->get_n(); I++)
   {
+    _E_[I]->calc_vals(_sys_->get_moli(I), _shCalc_,
+                      _consts_->get_dielectric_prot());
+    _LE_[I]->calc_vals(_sys_->get_moli(I), _shCalc_,
+                       _consts_->get_dielectric_prot());
     for (int k = 0; k < _sys_->get_Ns_i(I); k++)
     {
-      _E_[I]->reset_mat(k);
-      _LE_[I]->reset_mat(k);
       _LF_[I]->reset_mat(k);
       _LH_[I]->reset_mat(k);
       _LHN_[I]->reset_mat(k);
       _XF_[I]->reset_mat(k);
       _XH_[I]->reset_mat(k);
-      _H_[I]->reset_mat(k);
-      _F_[I]->reset_mat(k);
       _prevH_[I]->reset_mat(k);
       _outerH_[I]->reset_mat(k);
       _rotH_[I]->reset_mat(k);
     }
-    _IE_[I]->reset_mat();
   }
+  
+  _precalcSH_->clear_sh();
+  precalc_sh_lf_lh();
+  precalc_sh_numeric();
 }
 
 
@@ -521,7 +566,7 @@ GradSolver::GradSolver(shared_ptr<SystemSAM> _sys,
                        shared_ptr<PreCalcSH> precalc_sh,
                        shared_ptr<ExpansionConstants> _expConst,
                        int p, bool no_pre_sh)
-:p_(p), _F_(_F), _H_(_H), _T_(_T),
+:p_(p), Ns_tot_(0), _F_(_F), _H_(_H), _T_(_T),
 _bCalc_(_bCalc), _shCalc_(_shCalc),
 _sys_(_sys), _consts_(_consts), kappa_(_consts->get_kappa()),
 interpol_(interpol), _IE_(_IE), _expConsts_(_expConst),
@@ -570,6 +615,33 @@ precalcSH_(precalc_sh), noPreSH_(no_pre_sh)
   for (int i = 0; i < _T_->get_T_ct(); i++)  _T_->compute_derivatives_i(i);
 }
 
+GradSolver::GradSolver(shared_ptr<GradSolver> gradin)
+: p_(gradin->p_), kappa_(gradin->kappa_), Ns_tot_(gradin->Ns_tot_),
+precalcSH_(gradin->precalcSH_),
+noPreSH_(gradin->noPreSH_),
+_F_(gradin->_F_),
+_H_(gradin->_H_),
+_IE_(gradin->_IE_),
+_T_(gradin->_T_),
+dF_(gradin->dF_),
+dH_(gradin->dH_),
+prev_dH_(gradin->prev_dH_),
+outer_dH_(gradin->outer_dH_),
+dWF_(gradin->dWF_),
+dWH_(gradin->dWH_),
+dLF_(gradin->dLF_),
+dLH_(gradin->dLH_),
+dLHN_(gradin->dLHN_),
+gradT_A_(gradin->gradT_A_),
+_sys_(gradin->_sys_),
+_shCalc_(gradin->_shCalc_),
+_bCalc_(gradin->_bCalc_),
+_expConsts_(gradin->_expConsts_),
+_consts_(gradin->_consts_),
+interpol_(gradin->interpol_),
+dev_sph_Ik_(gradin->dev_sph_Ik_)
+{ }
+
 void GradSolver::solve(double tol, int maxiter)
 {
   double mu;
@@ -585,7 +657,7 @@ void GradSolver::solve(double tol, int maxiter)
     while(mu > tol)
     {
       mu = iter(ct, j);
-      if (ct % 10 == 0) cout << "Iter step " << ct << endl;
+      if ((ct+1) % 10 == 0) cout << "Iter step " << ct << endl;
       if (ct > maxiter)  break;
       ct++;
     }

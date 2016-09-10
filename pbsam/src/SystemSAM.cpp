@@ -486,12 +486,10 @@ SystemSAM::SystemSAM(Setup setup, double cutoff)
         
       }
       
-      cout << "This is old cog " << mol->get_cog().x() << ", "
-      << mol->get_cog().y() << ", " << mol->get_cog().z() << endl;
       mol->rotate(rot);
       mol->translate(trans, setup.getBLen());
-      cout << "This is new cog " << mol->get_cog().x() << ", "
-      << mol->get_cog().y() << ", " << mol->get_cog().z() << endl;
+    //cout << "This is new cog " << mol->get_cog().x() << ", "
+    //<< mol->get_cog().y() << ", " << mol->get_cog().z() << endl;
       
       molecules_.push_back(mol);
       keys[0] = i; keys[1] = j;
@@ -627,9 +625,10 @@ void SystemSAM::write_to_xyz(ofstream & xyz_out)
   char xyzlin[400];
   
   for ( i = 0; i < N_; i++ )
-    for ( j = 0; j < get_Nc_i(i); j++)
-      at_tot++;
-  at_tot += N_; // for adding CG centers
+  {
+    at_tot += get_Nc_i(i);
+    at_tot += get_Ns_i(i);
+  }
   
   xyz_out << at_tot << endl;
   xyz_out << "Atoms. Timestep (ps): " << t_ << endl;

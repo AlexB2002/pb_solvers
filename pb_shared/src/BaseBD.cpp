@@ -162,6 +162,7 @@ void BaseBDStep::indi_trans_update(int i, Pt fi)
   double kT = _consts_->get_kbt();
   double ikT_int = 1 / Constants::convert_j_to_int(kT);
   double coeff = transDiffConsts_[i] * dt_ * ikT_int;
+
   Pt dr = Pt(fi * coeff);
   Pt rand, new_pt;
   bool accept = false;

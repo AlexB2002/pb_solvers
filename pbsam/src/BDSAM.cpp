@@ -91,12 +91,6 @@ BDStepSAM::BDStepSAM(shared_ptr<BaseSystem> _sys, shared_ptr<Constants> _consts,
                bool diff, bool force)
 :BaseBDStep(_sys, _consts, diff, force)
 {
-  for (int i = 0; i < _sys_->get_n(); i++)
-  {
-    transDiffConsts_[i] = _sys_->get_dtransi(i);
-    rotDiffConsts_[i] = _sys_->get_droti(i);
-  }
-  
   random_device rd;
   randGen_ = mt19937(rd());
 }
@@ -127,7 +121,6 @@ BDRunSAM::BDRunSAM(shared_ptr<Solver> _solv, shared_ptr<GradSolver> _gradSolv,
 _solver_(_solv), _gradSolv_(_gradSolv)
 {
   _physCalc_ = make_shared<PhysCalcSAM>(_solv, _gradSolv, outfname);
-  
   _stepper_ = make_shared<BDStepSAM> (_solver_->get_sys(),
                                    _solver_->get_consts(), diff, force);
 }
@@ -139,15 +132,9 @@ void BDRunSAM::run(string xyzfile, string statfile, int nSCF)
   ofstream xyz_out, stats;
   xyz_out.open(xyzfile);
   stats.open(statfile, fstream::in | fstream::out | fstream::app);
-  
+
   while (i < maxIter_ and !term)
   {
-    if ((i % WRITEFREQ) == 0 )
-    {
-      _stepper_->get_system()->write_to_xyz(xyz_out);
-      if (i != 0)  _physCalc_->print_all();
-    }
-    
     _solver_->reset_all();
     if (nSCF != 0) scf = nSCF;
 
@@ -156,6 +143,19 @@ void BDRunSAM::run(string xyzfile, string statfile, int nSCF)
     _gradSolv_->solve(prec_, scf);
     _physCalc_->calc_force();
     _physCalc_->calc_torque();
+    
+    
+    if ((i % WRITEFREQ) == 0 )
+    {
+      _stepper_->get_system()->write_to_xyz(xyz_out);
+//      cout << "This is step " << i << endl;
+//      for (int i = 0; i<_stepper_->get_system()->get_n(); i++)
+//      {
+//      cout << "This is force " <<  _physCalc_->get_forcei(i).x() <<", "<< _physCalc_->get_forcei(i).y() << ", " << _physCalc_->get_forcei(i).z() <<  endl;
+//      }
+        _physCalc_->print_all();
+    }
+    
     _stepper_->bd_update(_physCalc_->get_F(), _physCalc_->get_Tau());
     
     if (_terminator_->is_terminated(_stepper_->get_system()))

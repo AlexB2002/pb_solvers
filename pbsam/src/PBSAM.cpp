@@ -243,43 +243,45 @@ void PBSAM::initialize_pbsam()
   {
     string fil=_setp_->getTypeNPQR(i);
     // Generate surface integrals and buried and exposed points
-    //on the molecule surface of each molecule
+    // on the molecule surface for each molecule type
+      
     idx0 = _syst_->get_mol_global_idx(i,0);
     auto imt = make_shared<IEMatrix>(idx0, _syst_->get_moli(idx0),
-                                    _sh_calc_, poles_, _exp_consts_,
-                                    true, 0, true); // Calc points for mol
-   
-    imats_[idx0] = make_shared<IEMatrix>(idx0, _syst_->get_moli(idx0),
                                      _sh_calc_, poles_, _exp_consts_,
-                                     false);
-   
-     if (_setp_->getTypeNImat(i) != "" )
-     {
-         string istart = _setp_->getTypeNImat(i);
-         for (j = 0; j < _syst_->get_Ns_i(i); j++)
-            imats_[idx0]->init_from_file(istart+to_string(j)+".bin", j);
-     
-     } else
-     {
-       cout << "Generating IMatrices " << fil << endl;
-       clock_t t3 = clock();
-     
-       imats_[idx0]->calc_vals(_syst_->get_moli(idx0), _sh_calc_);
-       imats_[idx0]->write_all_mat(fil.substr(0, fil.size()-4));
-         
-       t3 = clock() - t3;
-       printf ("Imat took me %f seconds.\n",
-                ((float)t3)/CLOCKS_PER_SEC);
-      }
+                                     true, 0, true); // Calc points for mol
+    
+    imats_[idx0] = make_shared<IEMatrix>(idx0, _syst_->get_moli(idx0),
+                                        _sh_calc_, poles_, _exp_consts_,
+                                        false);
+    
+    if (_setp_->getTypeNImat(i) != "" )
+    {
+      string istart = _setp_->getTypeNImat(i);
+      for (j = 0; j < _syst_->get_Ns_i(i); j++)
+        imats_[idx0]->init_from_file(istart+to_string(j)+".bin", j);
       
-      for (k=1; k<_setp_->getTypeNCount(i); k++)
-        
+    } else
+    {
+      cout << "Generating IMatrices " << fil << endl;
+      clock_t t3 = clock();
+
+      imats_[idx0]->calc_vals(_syst_->get_moli(idx0), _sh_calc_);
+      imats_[idx0]->write_all_mat(fil.substr(0, fil.size()-4));
+    
+      t3 = clock() - t3;
+      printf ("Imat took me %f seconds.\n",
+              ((float)t3)/CLOCKS_PER_SEC);
+    }
+    
+    for (k=1; k<_setp_->getTypeNCount(i); k++)
     {
       idx = _syst_->get_mol_global_idx(i,k);
       imats_[idx] = make_shared<IEMatrix>(imats_[idx0]);
-        
+
       _syst_->copy_grid(_syst_->get_mol_global_idx(i,0), idx);
     }
+    
+    
     for (k=0; k<_setp_->getTypeNCount(i); k++)
     {
       idx = _syst_->get_mol_global_idx(i,k);
@@ -296,7 +298,8 @@ void PBSAM::initialize_pbsam()
       {
         for (k = 0; k < _syst_->get_Ns_i(i); k++)
         {
-          idx = _syst_->get_mol_global_idx(i,k);
+          idx = _syst_->get_mol_global_idx(i,j);
+
           h_spol_[idx]->init_from_exp(estart+".H."+to_string(k)+".exp",k);
           f_spol_[idx]->init_from_exp(estart+".F."+to_string(k)+".exp",k);
         }
@@ -438,18 +441,19 @@ void PBSAM::run_dynamics()
     string stats = _setp_->getRunName();
     _syst_->reset_positions( _setp_->get_trajn_xyz(traj));
     _syst_->set_time(0.0);
+    solv->set_H_F(h_spol_, f_spol_);
     BDRunSAM dynamic_run( solv, gsolv, term_conds, outfile);
     dynamic_run.run(xyztraj, statfile);
     cout << "Done with trajectory " << traj << endl;
     if (traj==0)
       for (i=0; i<_syst_->get_n(); i++)
       {   
-      //Pt tmp = dynamic_run.get_force_i(i) * _consts_->get_conv_factor();
-      //force_[i][0] = tmp.x(); force_[i][1] = tmp.y(); force_[i][2] = tmp.z();
-      //tmp = dynamic_run.get_torque_i(i) * _consts_->get_conv_factor();
-      //torque_[i][0] = tmp.x(); torque_[i][1] = tmp.y(); torque_[i][2] = tmp.z();
-      //nrg_intera_[i]=dynamic_run.get_energy_i(i)*_consts_->get_conv_factor();
-      }   
+        Pt tmp = dynamic_run.get_force_i(i)*_consts_->get_conv_factor();
+        force_[i][0]=tmp.x(); force_[i][1]=tmp.y(); force_[i][2]=tmp.z();
+        tmp = dynamic_run.get_torque_i(i)*_consts_->get_conv_factor();
+        torque_[i][0]=tmp.x(); torque_[i][1]=tmp.y(); torque_[i][2]=tmp.z();
+        nrg_intera_[i]=dynamic_run.get_energy_i(i)*_consts_->get_conv_factor();
+      }
   }
 } // end run_dynamics()
 
@@ -489,30 +493,29 @@ void PBSAM::run_energyforce()
   auto solv = make_shared<Solver>(_syst_, _consts_, _sh_calc_, _bessl_calc_,
                                   poles_, imats_, h_spol_, f_spol_);
   if (_syst_->get_n() > 1) solv->solve(1e-15, 100);
-    
-//    cout << "Hello world"<< endl;
-//akuhn solve force out comment
-//  auto gsolv = make_shared<GradSolver>(_syst_, _consts_, _sh_calc_, 
-//                                       _bessl_calc_, solv->get_T(),
-//                                       solv->get_all_F(), solv->get_all_H(),
-//                                       solv->get_IE(),solv->get_interpol_list(),
-//                                        solv->get_precalc_sh(),
-//                                       _exp_consts_, poles_);
-//  if (_syst_->get_n() > 1) gsolv->solve(solveTol_, 100);
-//  
-//  PhysCalcSAM calcEnFoTo(solv, gsolv, _setp_->getRunName(), 
-//                         _consts_->get_unitsEnum());
-//  calcEnFoTo.calc_all();
-//  calcEnFoTo.print_all();
-//
-//  for (i = 0; i < _syst_->get_n(); i++)
-//  {
-//    Pt tmp = calcEnFoTo.get_forcei_conv(i);
-//    force_[i][0] = tmp.x(); force_[i][1] = tmp.y(); force_[i][2] = tmp.z();
-//    tmp = calcEnFoTo.get_taui_conv(i);
-//    torque_[i][0] = tmp.x(); torque_[i][1] = tmp.y(); torque_[i][2] = tmp.z();
-//    nrg_intera_[i]  = calcEnFoTo.get_omegai_conv(i);
-//  }
+  
+  auto gsolv = make_shared<GradSolver>(_syst_, _consts_, _sh_calc_, 
+                                       _bessl_calc_, solv->get_T(),
+                                       solv->get_all_F(), solv->get_all_H(),
+                                       solv->get_IE(),solv->get_interpol_list(),
+                                        solv->get_precalc_sh(),
+                                       _exp_consts_, poles_);
+  if (_syst_->get_n() > 1) gsolv->solve(solveTol_, 100);
+  
+  PhysCalcSAM calcEnFoTo(solv, gsolv, _setp_->getRunName(), 
+                         _consts_->get_unitsEnum());
+  calcEnFoTo.calc_all();
+  calcEnFoTo.print_all();
+
+  for (i = 0; i < _syst_->get_n(); i++)
+  {
+    Pt tmp = calcEnFoTo.get_forcei_conv(i);
+    force_[i][0] = tmp.x(); force_[i][1] = tmp.y(); force_[i][2] = tmp.z();
+    tmp = calcEnFoTo.get_taui_conv(i);
+    torque_[i][0] = tmp.x(); torque_[i][1] = tmp.y(); torque_[i][2] = tmp.z();
+    nrg_intera_[i]  = calcEnFoTo.get_omegai_conv(i);
+  }
+
 
   t3 = clock() - t3;
   printf ("energyforce calc took me %f seconds.\n",

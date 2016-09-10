@@ -70,8 +70,6 @@ class BDStepSAM: public BaseBDStep
 {
 protected:
 
-  shared_ptr<BaseSystem> _sys_;
-  
   // compute the smallest distance between two MoleculeAM centers
   void compute_min_dist( );
   
@@ -103,15 +101,14 @@ public:
   BDRunSAM(shared_ptr<Solver> _solv, shared_ptr<GradSolver> _gradSolv,
         shared_ptr<BaseTerminate> _terminator, string outfname,
         bool diff = true, bool force = true,
-        int maxiter = 2, double prec = 1e-4);
+        int maxiter = 1e8, double prec = 1e-4);
   
   void run(string xyzfile = "test.xyz", string statfile = "stats.dat", 
            int nSCF = 0);
 
-//Pt get_force_i(int i)      {return _physCalc_->get_forcei(i);}
-//Pt get_torque_i(int i)     {return _physCalc_->get_taui(i);}
-//double get_energy_i(int i) {return _physCalc_->calc_ei(i);}
-  
+  Pt get_force_i(int i)      {return _physCalc_->get_forcei(i);}
+  Pt get_torque_i(int i)     {return _physCalc_->get_taui(i);}
+  double get_energy_i(int i) {return _physCalc_->calc_ei(i);}
 };
 
 

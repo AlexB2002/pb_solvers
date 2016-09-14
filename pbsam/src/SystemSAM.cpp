@@ -254,9 +254,10 @@ CGSphere MoleculeSAM::find_best_center(vector<Pt> sp,vector<Pt> np,
 {
   int sz = (int) unbound.size();
   Pt best_cen;
-  double best_a = 0;
+  double best_a(0);
   int iter(1200), best_N(0); //??
   vector<int> ch;  // encompassed charges of best sphere
+  double ch_tot, ch_max(2.0);
   
   best_cen = pos_[unbound[(int) floor(drand48()*sz)]];  
   for (int m = 0; m < iter; m++)
@@ -291,11 +292,21 @@ CGSphere MoleculeSAM::find_best_center(vector<Pt> sp,vector<Pt> np,
     tri_a *= tri_a;
     
     // count number of unbound charges within this sphere  //???
+    ch_tot = 0.0; // lf
     for (int i = 0; i < sz; i++)
     {
       double dist = (pos_[unbound[i]] - tri_cen).norm() + vdwr_[unbound[i]];
-      if (dist < sqrt(tri_a)) tri_N++;
+//      if (dist < sqrt(tri_a)) tri_N++;
+      if (dist < sqrt(best_a))
+      {
+        tri_N++;
+        ch_tot += qs_[sz];
+      }
     }
+    
+    // Checking the charge encompassed by the CG sphere
+    // Enforcing a max on it.
+    if (ch_tot > ch_max) continue;
     
     //apply MC criteria
     if (exp(beta*(tri_N - best_N)) > drand48())

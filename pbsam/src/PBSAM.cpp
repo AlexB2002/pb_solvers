@@ -165,6 +165,7 @@ void PBSAM::check_setup()
     cout << ex.what() << endl;
     exit(0);
   }
+  poles_ = _setp_->getNPoles();
   cout << "All inputs okay " << endl;
 }
 

@@ -434,9 +434,9 @@ double Solver::iter(int t)
         Ns_tot_++;
         if ( dev_sph_Ik_[I][k] > mu_int )
           mu_int = dev_sph_Ik_[I][k];
-          _H_[I]->print_kmat(k);  //akuhn
-          _F_[I]->print_kmat(k);  //akuhn
       }
+        _H_[I]->print_kmat(k);  //akuhn
+        _F_[I]->print_kmat(k);  //akuhn
     } // end k
   }
 

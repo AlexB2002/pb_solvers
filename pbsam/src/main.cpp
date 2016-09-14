@@ -45,8 +45,7 @@ int main(int argc, const char * argv[])
 //  string input_file = "/Users/lfelberg/PBSAM/pb_solvers/pbsam/pbsam_test_files/dynamics_test/opp/run.gly.hr.inp";
 string input_file = "/Users/akuhn/Desktop/pb_polz/pbsam/pbsam_test_files/energyforce_test/run.apbs.hardrefs.inp";
 
-  
   PBSAM pbsam_run(input_file);
-  pbsam_run.run();
+//  pbsam_run.run();
   return 0;
 }

@@ -82,7 +82,7 @@ void MoleculeSAM::map_repos_charges()
     cgCharges_[closest].push_back(cg);
     pos_[cg] = pos_[cg] - centers_[closest];  // reposition charge
 
-    chToCG_[cg] = closest;
+//    chToCG_[cg] = closest;  // lf, will need to replace in non cg parts
   }
   
   // Assigning all charges to either in or out of MoleculeSAM
@@ -234,11 +234,14 @@ void MoleculeSAM::find_centers(vector<Pt> sp, vector<Pt> np,
     
     // remove bound charges from list of unbound charges:
     for (int l = 0; l < cgCharges_[j].size(); l++)
+    {
       for (int f = 0; f < unbound.size(); f++)
         if (unbound[f] == cgCharges_[j][l])
         {
           unbound.erase(unbound.begin() + f);
         }
+      chToCG_[cgCharges_[j][l]] = j; // lf
+    }
     ct++;
   }
 
@@ -306,7 +309,7 @@ CGSphere MoleculeSAM::find_best_center(vector<Pt> sp,vector<Pt> np,
     
     // Checking the charge encompassed by the CG sphere
     // Enforcing a max on it.
-    if (ch_tot > ch_max) continue;
+    if (fabs(ch_tot) > ch_max) continue;
     
     //apply MC criteria
     if (exp(beta*(tri_N - best_N)) > drand48())
@@ -315,6 +318,9 @@ CGSphere MoleculeSAM::find_best_center(vector<Pt> sp,vector<Pt> np,
       best_N = tri_N;
       best_a = tri_a; 
     }
+    
+    
+    cout << "This is charge total" << ch_tot << endl;
     
     if ((m+1) % 100 == 0) beta *= 1.1;
   }
@@ -326,6 +332,7 @@ CGSphere MoleculeSAM::find_best_center(vector<Pt> sp,vector<Pt> np,
     if (dist < sqrt(best_a))
     {
       ch.push_back(unbound[i]);
+      
     }
   }
   

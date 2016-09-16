@@ -325,7 +325,7 @@ protected:
   
 public:
   
-  PQRFile(string path, int approx_size=5000)
+  PQRFile(string path, int approx_size=23000)  //akuhn
   :path_(path), centerGeo_(0.0, 0.0, 0.0)
   {
     charges_.reserve(approx_size);

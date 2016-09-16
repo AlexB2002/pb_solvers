@@ -48,6 +48,7 @@ protected:
   int     maxtime_;
   int     ntraj_;
   int     npoles_;
+  int     nsolveTol_;
   int     srand_;			// random seed
   double  saltConc_;
   double  blen_; 		// boxlength for PBC
@@ -258,6 +259,7 @@ public:
   double getSaltConc()             { return saltConc_; }
   double getTemp()                 { return temp_; }
   int getNPoles()                  { return npoles_; }
+  int getNSolveTol()               { return nsolveTol_;}
   double getDtr( int n )           { return typeDiff_[n][0]; }
   double getDrot( int n )          { return typeDiff_[n][1]; }
   double getKappa()                { return kappa_; }

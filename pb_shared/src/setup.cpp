@@ -25,6 +25,7 @@ idiel_( 4.0 ),
 sdiel_( 78.0 ),
 temp_( 298.0 ),
 npoles_( 5 ),
+nsolveTol_( 1e-4 ),
 srand_( (unsigned)time(NULL) ),
 nTypenCount_(2),
 typeDef_(2),
@@ -346,6 +347,10 @@ void Setup::findKeyword(vector<string> fline)
   } else if (keyword == "poles")
   {
     cout << "Number of poles command found" << endl;
+    setNPoles( atoi(fline[1].c_str()) );
+  } else if (keyword == "solveTol")
+  {
+    cout << "SolvTol command found" << endl;
     setNPoles( atoi(fline[1].c_str()) );
   }else if (keyword == "termct")
   {

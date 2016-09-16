@@ -166,6 +166,7 @@ void PBSAM::check_setup()
     exit(0);
   }
   poles_ = _setp_->getNPoles();
+  solveTol_=_setp_->getNSolveTol();
   cout << "All inputs okay " << endl;
 }
 

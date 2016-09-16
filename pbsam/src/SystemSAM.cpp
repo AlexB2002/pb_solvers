@@ -295,7 +295,7 @@ CGSphere MoleculeSAM::find_best_center(vector<Pt> sp,vector<Pt> np,
     tri_a *= tri_a;
     
     // count number of unbound charges within this sphere  //???
-    ch_tot = 0.0; // lf
+    ch_tot = 0.0; //
     for (int i = 0; i < sz; i++)
     {
       double dist = (pos_[unbound[i]] - tri_cen).norm() + vdwr_[unbound[i]];

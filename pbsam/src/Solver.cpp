@@ -418,7 +418,7 @@ double Solver::iter(int t)
       // if there is more than 1 mol, run if there are sphs on mol to pol (LHN)
       if ((_sys_->get_n()>1) && (_LHN_[I]->get_interPol_k(k) != 0))
         pol = false;
-      if((dev_sph_Ik_[I][k] > 0.5*mu_ && pol) ||   //akuhn
+      if((dev_sph_Ik_[I][k] > 0.1*mu_ && pol) ||   //akuhn
          ((t%5==0) && (_sys_->get_n()==1)))
       {
         update_outerH(I, k);
